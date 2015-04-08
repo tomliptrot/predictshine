@@ -1,3 +1,5 @@
+ model_data = budworm.lg$model 
+ids = names(budworm.lg$model )
  shinyUI(fluidPage(
 		uiOutput("ui"),
 		verbatimTextOutput(ids[1]),

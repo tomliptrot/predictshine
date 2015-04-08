@@ -1,6 +1,7 @@
 library(plyr)
 model_data = budworm.lg$model 
-ids = names(budworm.lg$model )
+ids = names(budworm.lg$model 
+?predict
 	
 get_new_data <- function(model_data, ids, input ){
 
@@ -20,6 +21,7 @@ get_new_data <- function(model_data, ids, input ){
 		data_new
 }	
 
+shinyApp(
 
 shinyServer(function(input, output) {
 

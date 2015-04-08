@@ -1,4 +1,6 @@
 setwd('C:\\Users\\Tom\\Documents\\R\\shinyModels')
+setwd("//cht-gs1/ClinicalOutcomes$/Tom/R/predictshine")
+library(shiny)
 runApp()
 model_input <- function (x, ...) {
 	UseMethod("model_input")
@@ -16,6 +18,25 @@ model_input.numeric <- function(x , id = NULL){
 	if(is.null(id)) id = deparse(substitute(x))
 	sliderInput(id, label = id, min = min(x), max = max(x), value = median(x))
 	}
+	
+get_new_data <- function(model_data, ids, input ){
+
+		data_new = alply(1:length(ids), 1, function(i){
+			input[[ ids[i] ]]
+			})
+			
+		data_new = as.data.frame(data_new)	
+		names(data_new) <- names(model_data)
+		
+		for(i in 1:ncol(model_data)){
+			if( is.factor(model_data[[i]] )){
+				data_new[[i]] <- factor(data_new[[i]], levels = levels(model_data[[i]]))
+				}
+			}
+			
+		data_new
+}	
+
 	
 sliderInput("cycle_1_dose", label = h3("cycle 1 dose"), min = 10, 
 				max = 25, value = 15)

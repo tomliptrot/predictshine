@@ -1,4 +1,6 @@
 predictshine = function(fit, main = NULL, ...){
+	library(shiny)
+	library(plyr)
 
 	if(is.null(main)) main = deparse(substitute(fit))
 
@@ -11,10 +13,15 @@ predictshine = function(fit, main = NULL, ...){
 				titlePanel(main),
 				sidebarLayout(
 					sidebarPanel(
+						textOutput("call"),
+						h4(),
 						uiOutput("ui")
 						),
-					mainPanel(						
-						h4(textOutput('df'))
+					mainPanel(	
+							tabsetPanel(
+								tabPanel("Prediction", plotOutput('pred_plot')),
+								tabPanel("Model Summary", verbatimTextOutput("model"))
+								)
 						)
 					)	
 			),
@@ -26,12 +33,13 @@ predictshine = function(fit, main = NULL, ...){
 			inputs_list = alply(1:ncol(model_data ), 1, function(i){
 							model_input(model_data [[i]], id = ids[i])
 							})
-		
+			
+			output$call = renderPrint({fit$call})
 			output$ui <- renderUI({	inputs_list	})
 			
 			predictions = reactive({
 				data_new = get_new_data(model_data, ids, input)	
-				predict(fit, newdata = data_new, ...)
+				get_prediction(fit, newdata = data_new)
 				})
 				
 			a_ply(1:length(ids), 1, function(i){
@@ -43,6 +51,14 @@ predictshine = function(fit, main = NULL, ...){
 			output$df <- renderText({
 				predictions()
 				})
+				
+			 output$pred_plot <- renderPlot({ 
+					pred = predictions()
+					mp(cex = 1)
+					plot(pred, ... )
+					})
+				
+			output$model = renderPrint({summary(fit)})
 				
 			
 		}

@@ -1,8 +1,8 @@
 Package: predictshine
-Title: What the Package Does (one line, title case)
+Title: Interactive Predictions in R with Shiny 
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph)
+Authors@R: person("Tom", "Liptrot", email = "tomliptrot@gmail.com", role = c("aut", "cre"))
+Description: The predictshine package allows users to create interactive shiny based web-apps to make predictions about individuals. its main function predictshine() works similarly to the predict() function. First the user creates a statisticical model, then calls predictshine() to bring up a browser based interace to predict the dependenet variable based on changes to the independent variable. Currently, methods are implemented for linear regressions, logistic regressions and cox proportional hazards models.
 Depends: R (>= 3.2.0)
 License: What license is it under?
 LazyData: true

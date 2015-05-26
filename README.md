@@ -39,6 +39,7 @@ This will launch a browser window that will allow interactive exploration of the
 ```R
 predictshine(mylm)
 ```
+Giving you this:
 
 ![] (http://tomliptrot.github.io/lm_predictshine.JPG)
 

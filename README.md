@@ -1,6 +1,6 @@
 # predictshine
 ### interactive predictions in R with shiny
-The predictshine package allows users to create interactive shiny based web-apps to make predictions about individuals. its main function `predictshine()` functions similarly to the `predict()` function. First the user creates a statisticical model, then calls `predictshine()` to bring up a browser based interace to predict the dependenet variable based on changes to the independent variable. 
+The predictshine package allows users to create interactive shiny based web-apps to make predictions about individuals. its main function `predictshine()` works similarly to the `predict()` function. First the user creates a statisticical model, then calls `predictshine()` to bring up a browser based interace to predict the dependenet variable based on changes to the independent variable. 
 
 Currently, methods are implemented for linear regressions, logistic regressions and cox proportional hazards models.
 
@@ -39,6 +39,8 @@ This will launch a browser window that will allow interactive exploration of the
 ```R
 predictshine(mylm)
 ```
+
+![] (http://tomliptrot.github.io/lm_predictshine.JPG)
 
 To close this window press escape in the R concole
 

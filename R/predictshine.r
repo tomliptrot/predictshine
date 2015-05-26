@@ -2,13 +2,14 @@
 #' 
 #' @param fit a model object from either lm, glm or coxph.
 #' @param main a main title for the app, defaults to the name of \code{fit}
-#' @param ... arguments to be passed to plot()
-#' @return An object that represents the app. Printing the object or passing it to runApp() will run the app.
+#' @param variable_descriptions an optional character vector giving description of each variable in the model. Defaults to \code{NULL}, giving headings based on the variable names only
+#' @param ... optional arguments to be passed to \code{plot()}
+#' @return An object that represents the app. Printing the object or passing it to \code{runApp()} will run the app.
 #' @examples
 #' # linear regression
 #' # create demo linear model using school dataset
 #'
-#' mylm <- lm(gre ~ admit + gpa + rank, data = school)
+#' predictshine(mylm, main = 'Linear Model example', variable_descriptions = c('Admission (0 = yes, 1 = no)', 'Grade point average', 'Class rank'))
 #' predictshine(mylm)
 #' 
 #' # Logistic regression
@@ -27,14 +28,15 @@
 #' fit_cox = coxph(Surv(time, status) ~ age + sex + ph.ecog , lung, model = TRUE) 
 #' 
 #' predictshine(fit_cox, xscale = 365 , xlab = 'Time (years)', ylab = 'Overall Survival')
-predictshine = function(fit, main = NULL, ...){
+predictshine = function(fit, main = NULL, variable_descriptions = NULL, ...){
 	library(shiny)
 	library(plyr)
 
 	if(is.null(main)) main = deparse(substitute(fit))
 
 	model_data = fit$model[-1]
-	ids = names(fit$model)[-1]
+	if(is.null(variable_descriptions))	ids = names(fit$model)[-1]
+	else ids = variable_descriptions
 
 	shinyApp(
 	# ui -----------------------------------------------------------------------------------------------

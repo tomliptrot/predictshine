@@ -4,17 +4,19 @@
 \alias{predictshine}
 \title{Make interactive model predictions with shiny}
 \usage{
-predictshine(fit, main = NULL, ...)
+predictshine(fit, main = NULL, variable_descriptions = NULL, ...)
 }
 \arguments{
 \item{fit}{a model object from either lm, glm or coxph.}
 
 \item{main}{a main title for the app, defaults to the name of \code{fit}}
 
-\item{...}{arguments to be passed to plot()}
+\item{variable_descriptions}{an optional character vector giving description of each variable in the model. Defaults to \code{NULL}, giving headings based on the variable names only}
+
+\item{...}{optional arguments to be passed to \code{plot()}}
 }
 \value{
-An object that represents the app. Printing the object or passing it to runApp() will run the app.
+An object that represents the app. Printing the object or passing it to \code{runApp()} will run the app.
 }
 \description{
 Make interactive model predictions with shiny
@@ -23,7 +25,7 @@ Make interactive model predictions with shiny
 # linear regression
 # create demo linear model using school dataset
 
-mylm <- lm(gre ~ admit + gpa + rank, data = school)
+predictshine(mylm, main = 'Linear Model example', variable_descriptions = c('Admission (0 = yes, 1 = no)', 'Grade point average', 'Class rank'))
 predictshine(mylm)
 
 # Logistic regression

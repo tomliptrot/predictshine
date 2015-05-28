@@ -28,31 +28,34 @@
 #' fit_cox = coxph(Surv(time, status) ~ age + sex + ph.ecog , lung, model = TRUE) 
 #' 
 #' predictshine(fit_cox, xscale = 365 , xlab = 'Time (years)', ylab = 'Overall Survival')
-predictshine = function(fit, main = NULL, variable_descriptions = NULL, ...){
+predictshine = function(fit, page_title = NULL, variable_descriptions = NULL,description = NULL, ncol_termplot = 2,...){
 	library(shiny)
 	library(plyr)
 
-	if(is.null(main)) main = deparse(substitute(fit))
-
+	if(is.null(page_title)) page_title = deparse(substitute(fit))
+	#TODO could use model.frame + delete.response here - see code for predict and termplot
 	model_data = fit$model[-1]
+	n_vars = ncol(model_data)
 	if(is.null(variable_descriptions))	ids = names(fit$model)[-1]
 	else ids = variable_descriptions
 
 	shinyApp(
 	# ui -----------------------------------------------------------------------------------------------
 		ui =  fluidPage(
-				titlePanel(main),
+				titlePanel(page_title),
 				sidebarLayout(
 					sidebarPanel(
-						textOutput("call"),
+						description,
+						#textOutput("call"),
 						h4(),
 						uiOutput("ui"),
 						p('To close window press escape in the R console')
 						),
 					mainPanel(	
 							tabsetPanel(
-								tabPanel("Prediction", plotOutput('pred_plot')),
-								tabPanel("Model Summary", verbatimTextOutput("model"))
+								tabPanel(h4("Prediction"), plotOutput('pred_plot')),
+								tabPanel(h4("Regression Term plot"), plotOutput('term_plot', height = "800px")),
+								tabPanel(h4("Model Summary"), verbatimTextOutput("model"))
 								)
 						)
 					)	
@@ -91,6 +94,12 @@ predictshine = function(fit, main = NULL, variable_descriptions = NULL, ...){
 					})
 				
 			output$model = renderPrint({summary(fit)})
+			
+			output$term_plot = renderPlot({
+				ncol_termplot
+				mp(mfrow = c(ceiling(n_vars / ncol_termplot), ncol_termplot), cex.axis = 1)
+				termplot(fit, cex.axis = 1)
+				})
 				
 			
 		}

@@ -31,12 +31,15 @@ data(school)
 school$rank <- factor(school$rank)
 school$admit <- factor(school$admit)
 mylm <- lm(gre ~ admit + gpa + rank, data = school)
-predictshine(mylm)
+predictshine(mylm, main = 'Linear Model example', variable_descriptions = c('Admission (0 = yes, 1 = no)', 'Grade point average', 'Class rank'))
 
 
 
 mylogit <- glm(admit ~ gre + gpa + rank, data = school, family = "binomial")
+predictshine(mylogit)
 
+str(mylogit)
+mylogit$family$linkinv
 # Create the simplest test data set 
 library(survival)
 
@@ -47,8 +50,7 @@ lung$ph.ecog = factor(lung$ph.ecog )
 #note model must be set to TRUE
 fit_cox = coxph(Surv(time, status) ~ age + sex + ph.ecog , lung, model = TRUE) 
 
-?predictshine
-(fit_cox )
+predictshine(fit_cox )
 
 
 summary(fit_cox)

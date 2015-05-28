@@ -1,6 +1,6 @@
 # predictshine
 ### interactive predictions in R with shiny
-The predictshine package allows users to create interactive shiny based web-apps to make predictions about individuals. its main function `predictshine()` works similarly to the `predict()` function. First the user creates a statisticical model, then calls `predictshine()` to bring up a browser based interace to predict the dependenet variable based on changes to the independent variable. 
+The predictshine package allows users to create interactive shiny based web-apps to make predictions about individuals. its main function `predictshine()` works similarly to the `predict()` function. First the user creates a statistical model, then calls `predictshine()` to bring up a browser based interface to predict the dependent variable based user entered changes to the independent variables. This app can the be shared with anyone via the web.
 
 Currently, methods are implemented for linear regressions, logistic regressions and cox proportional hazards models.
 
@@ -29,15 +29,26 @@ set_config( config( ssl.verifypeer = 0L ) )
 
 ### Use
 #### Linear regression
-create demo linear model using school dataset
+Create demo linear model using the `well_being` dataset
 ```R
-mylm <- lm(gre ~ admit + gpa + rank, data = school)
+lm_1 = lm(overall_sat ~   age2  *region + sex  + married + age2*eductaion + ethnicity + health  , data = well_being)
 ```
 
-This will launch a browser window that will allow interactive exploration of the linear model created earlier
+Now call `predictshine()` to open an interactive browser window
+
 
 ```R
-predictshine(mylm)
+predictshine(lm_1, 
+	page_title = 'Happiness in the UK', 
+	variable_descriptions = c('Age', "Region", 'Sex','Marital status', 
+		"What is the highest level of qualification?",
+		"Ethnicity White/Other", 
+		"How is your health in general?" ),
+	main = 'Overall, how satisfied are you with your life nowadays?', 
+	xlab =  'predicted score out of 10', 
+	description = p('Alter variables to get predicted overall life satisfaction (out of 10). 
+		This model is made using data from the 1,00 respondents of the ONS Opinions Survey, 
+		Well-Being Module, April 2011'))
 ```
 Giving you this:
 

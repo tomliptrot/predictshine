@@ -31,7 +31,13 @@ set_config( config( ssl.verifypeer = 0L ) )
 #### Linear regression
 Create demo linear model using the `well_being` dataset
 ```R
-lm_1 = lm(overall_sat ~   age2  *region + sex  + married + age2*eductaion + ethnicity + health  , data = well_being)
+lm_1 = lm(overall_sat ~   age2  * region + 
+						  sex  + 
+						  married + 
+						  age2 * eductaion + 
+						  ethnicity 
+						  + health  , 
+						  data = well_being)
 ```
 
 Now call `predictshine()` to open an interactive browser window
@@ -47,7 +53,7 @@ predictshine(lm_1,
 	main = 'Overall, how satisfied are you with your life nowadays?', 
 	xlab =  'predicted score out of 10', 
 	description = p('Alter variables to get predicted overall life satisfaction (out of 10). 
-		This model is made using data from the 1,00 respondents of the ONS Opinions Survey, 
+		This model is made using data from the 1,000 respondents of the ONS Opinions Survey, 
 		Well-Being Module, April 2011'))
 ```
 Giving you this:

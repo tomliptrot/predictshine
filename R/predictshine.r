@@ -54,7 +54,7 @@ predictshine = function(fit, page_title = NULL, variable_descriptions = NULL,des
 					mainPanel(	
 							tabsetPanel(
 								tabPanel(h4("Prediction"), plotOutput('pred_plot')),
-								tabPanel(h4("Regression Term plot"), plotOutput('term_plot', height = "800px")),
+								#tabPanel(h4("Regression Term plot"), plotOutput('term_plot', height = "800px")),
 								tabPanel(h4("Model Summary"), verbatimTextOutput("model"))
 								)
 						)
@@ -95,11 +95,11 @@ predictshine = function(fit, page_title = NULL, variable_descriptions = NULL,des
 				
 			output$model = renderPrint({summary(fit)})
 			
-			output$term_plot = renderPlot({
-				ncol_termplot
-				mp(mfrow = c(ceiling(n_vars / ncol_termplot), ncol_termplot), cex.axis = 1)
-				termplot(fit, cex.axis = 1)
-				})
+			# output$term_plot = renderPlot({
+				# ncol_termplot
+				# mp(mfrow = c(ceiling(n_vars / ncol_termplot), ncol_termplot), cex.axis = 1)
+				# termplot(fit, cex.axis = 1)
+				# })
 				
 			
 		}

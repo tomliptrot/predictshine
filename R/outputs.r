@@ -80,6 +80,13 @@ plot_norm <- function(mu, sd,from, to, ...){
 	text(mu, x = mu, y = dnorm(mu,mu,sd), pos = 3, cex = 2)
 	}
 	
+makeTransparent<-function(someColor, alpha=100)
+{
+  newColor <- col2rgb(someColor)
+  apply(newColor, 2, function(curcoldata){rgb(red=curcoldata[1], green=curcoldata[2],
+    blue=curcoldata[3],alpha=alpha, maxColorValue=255)})
+}	
+	
 
 
 

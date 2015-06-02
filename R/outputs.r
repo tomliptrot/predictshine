@@ -41,14 +41,15 @@ plot.prediction_glm = function(pred,  ...){
 	text(p, x = p, y = 0.5, pos = 3, cex = 1.5)
 	}
 	
-plot.prediction_lm = function(pred,xlab = NULL,  ...){
+plot.prediction_lm = function(pred, xlab = NULL,  ...){
 
-	if(is.null(xlab)) xlab = response_name
+	if(is.null(xlab)) xlab = names(pred$fit$model)[1]
 	p = signif(pred$p, 2)
-	plot_norm(mu = p, sd = pred$sd, 
+	sd_pred = (pred$p - pred$lower) / 2
+	plot_norm(mu = p, sd = sd_pred, 
 		xlim = range(pred$fit$model[[1]]) * c(0.9, 1.1), 
-		from = p - 2.5 * pred$sd, 
-		to = p + 2.5 * pred$sd,
+		from = p - 2.5 * sd_pred, 
+		to = p + 2.5 * sd_pred,
 		xlab = xlab,
 		...)
 	
@@ -66,14 +67,15 @@ plot.prediction_lm = function(pred,xlab = NULL,  ...){
 	}
 	
 mp = function (pch = 20, mgp = c(2, 0.5, 0), mar = c(3, 3, 3, 1), 
-    tck = -0.01, las = 1, bty = "l", cex.axis = 0.7, ...) 
+    tck = -0.01, las = 1, bty = "l", cex.axis = 0.7, yaxs="i", xaxs = 'i',...) 
 {
     par(pch = pch, mgp = mgp, mar = mar, tck = tck, las = las, 
         bty = bty, cex.axis = cex.axis, ...)
 }
 
 plot_norm <- function(mu, sd,from, to, ...){		
-	coords = curve(dnorm(x,mu,sd),type = 'n',from = from, to = to, ylab = 'Density',...)
+	coords = curve(dnorm(x,mu,sd),type = 'n',from = from, to = to, ylab = 'Density', axes = FALSE,...)
+	axis(1)
 	polygon(coords,col=makeTransparent(2),  border = NA)
 	segments(x0 = mu, x1 = mu, y0 = 0, y1 = dnorm(mu,mu,sd), col = 2, lty = 2, lwd = 3)
 	par(xpd = TRUE)

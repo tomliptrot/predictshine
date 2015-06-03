@@ -85,6 +85,13 @@ b = ggplot(mylogit$model, aes_string (response))
 b + geom_histogram()
 
 
+  x <- c(1,2)
+  y <- c("a","b","c")
+  names(x) <- y
+
+Error in names(x) <- y : 
+  'names' attribute [3] must be the same length as the vector [2]
+
 
 class(lm.D9)
 data.frame(predict(lm.D9 ))[1,]

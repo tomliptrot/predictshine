@@ -75,7 +75,7 @@ args( poly(age2, degree = 2))
       m <- model.frame(Terms)
 
 str(well_being)
-
+rm(well_being)
 str(terms)
 str(eval(model$call$data, envir = environment(formula(model))))
 head(terms)
@@ -95,17 +95,34 @@ summary(lm_1)
 library(predictshine)
 variable_descriptions = c('Age', "Region", 'Sex','Marital status', "What is the highest level of qualification?","Ethnicity White/Other", "How is your health in general?" ),
 
-lm_1 = lm(overall_sat ~   age2  *region + sex  + married + age2*eductaion + ethnicity + health  , data = well_being)
+lm_1 = lm(overall_sat ~   age2  *region + sex  +  age2*eductaion + ethnicity + married*health  , data = well_being)
 
 predictshine(lm_1, 
 	page_title = 'Happiness in the UK', 
-	variable_descriptions = c('Age', "Region", 'Sex','Marital status', "What is the highest level of qualification?","Ethnicity White/Other", "How is your health in general?" ),
+	
 	main = 'Overall, how satisfied are you with your life nowadays?', 
 	xlab =  'predicted score out of 10', 
 	description = p('Alter variables to get predicted 
 		overall life satisfaction (out of 10). This model is made using data from the 1,00 respondents of the ONS Opinions Survey, 
 		Well-Being Module, April 2011'))
 		
+variable_descriptions = c('Age', "Region", 'Sex','Marital status', "What is the highest level of qualification?","Ethnicity White/Other", "How is your health in general?" ),
+library(shinyapps)	
+?deployApp
+?shinyApp
+shinyapps::deployApp(well_being)	
+
+ test_app = shinyApp(
+    ui = fluidPage(
+      numericInput("n", "n", 1),
+      plotOutput("plot")
+    ),
+    server = function(input, output) {
+      output$plot <- renderPlot( plot(head(cars, input$n)) )
+    }
+  )
+shinyapps::deployApp( test_app)	 
+  
 		
 		?tabPanel
 		

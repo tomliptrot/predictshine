@@ -33,11 +33,16 @@ predictshine = function(fit, page_title = NULL, variable_descriptions = NULL,des
 	library(plyr)
 
 	if(is.null(page_title)) page_title = deparse(substitute(fit))
-	#TODO could use model.frame + delete.response here - see code for predict and termplot
-	model_data = fit$model[-1]
+
+	if(is.null(fit$model) & class(fit) == "coxph") stop('Missing model frame from coxph() fit. Re-run coxph() setting model = TRUE and try again')
+	
+	model_data = model.frame(fit)[-1]
 	n_vars = ncol(model_data)
+	
 	if(is.null(variable_descriptions))	ids = names(fit$model)[-1]
 	else ids = variable_descriptions
+	
+	model_summary = summary(fit)
 
 	shinyApp(
 	# ui -----------------------------------------------------------------------------------------------
@@ -46,8 +51,9 @@ predictshine = function(fit, page_title = NULL, variable_descriptions = NULL,des
 				sidebarLayout(
 					sidebarPanel(
 						description,
-						#textOutput("call"),
 						h4(),
+						# uiOutput creates input sliders based on the class of terms in fit
+						# these object are created dynamically in the server function using model_input() and renderUI()
 						uiOutput("ui"),
 						p('To close window press escape in the R console')
 						),
@@ -64,43 +70,35 @@ predictshine = function(fit, page_title = NULL, variable_descriptions = NULL,des
 		
 		# server-----------------------------------------------------------------------------------------------
 		server = function(input, output) {
-		
+							
+			#inputs_list is a list of shiny widgets corresponding to each term in fit
+			# The list is created by calling model_input on each column of model_data
 			inputs_list = alply(1:ncol(model_data ), 1, function(i){
 							model_input(model_data [[i]], id = ids[i])
 							})
 			
-			output$call = renderPrint({fit$call})
 			output$ui <- renderUI({	inputs_list	})
-			
+
+			#creates a reactive function that makes prediction from the model fit and newdata as inputed by the user
+			# Only runs when input values change
 			predictions = reactive({
 				data_new = get_new_data(model_data, ids, input)	
+				if(is.null(data_new)) return(NULL)
 				get_prediction(fit, newdata = data_new)
 				})
-				
-			a_ply(1:length(ids), 1, function(i){
-					output[[ ids[i] ]] <- renderPrint({
-						str(input[[ ids[i] ]])
-					})
-				})
-				
-			output$df <- renderText({
-				predictions()
-				})
-				
+			
+			#creates a plot of the predictions
 			 output$pred_plot <- renderPlot({ 
 					pred = predictions()
+					if(is.null(pred)) return(NULL)
 					mp(cex = 1)
 					plot(pred, ... )
 					})
-				
-			output$model = renderPrint({summary(fit)})
 			
-			# output$term_plot = renderPlot({
-				# ncol_termplot
-				# mp(mfrow = c(ceiling(n_vars / ncol_termplot), ncol_termplot), cex.axis = 1)
-				# termplot(fit, cex.axis = 1)
-				# })
-				
+			#outputs a summary of the model			
+			output$model = renderPrint({model_summary})
+			
+			
 			
 		}
 		)

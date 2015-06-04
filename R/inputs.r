@@ -46,15 +46,17 @@ model_input.poly <- function(x , id = NULL){
 	
 get_new_data <- function(model_data, ids, input ){
 
-		
+		#creates a list of each variable entered by the user
 		data_new = plyr::alply(1:length(ids), 1, function(i){
 			input[[ ids[i] ]]
 			})
-			
+		
+		#turns list into data.frame
 		data_new = as.data.frame(data_new)	
 		
-		#an error is occuring here for some reason
-		if(length(names(data_new)) == length(names(model_data)))
+		#an error is occurring here for some reason
+		if(length(names(data_new)) != length(names(model_data))) return(NULL)
+		
 		names(data_new) <- names(model_data)
 	
 		

@@ -24,7 +24,7 @@ Error in function (type, msg, asError = TRUE)  :
 ```R
 library(RCurl)
 library(httr)
-set_config( config( ssl.verifypeer = 0L ) )
+set_config( config( ssl_verifypeer = 0L ) )
 ```
 
 ### Use

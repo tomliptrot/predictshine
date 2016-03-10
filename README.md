@@ -85,3 +85,17 @@ fit_cox = coxph(Surv(time, status) ~ age + sex + ph.ecog , lung, model = TRUE)
 predictshine(fit_cox )
 ```
 
+### Sharing applications
+
+There are several options for sharing predictshine applications. Applications can be stored as objects that `predictshine()` returns as follows:
+
+```R
+app <- predictshine(lm_1)
+runApp(app)
+
+# to run on a LAN use
+
+runApp(app,  host="0.0.0.0",port=3168)
+```
+
+
